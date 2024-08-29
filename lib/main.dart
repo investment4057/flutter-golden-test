@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,24 +21,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends HookWidget {
   const MyHomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final counter = useState(0); // useStateでステート管理したい変数を定義
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -51,14 +41,16 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times: xxxxx',
             ),
             Text(
-              '$_counter',
+              '${counter.value}', // .valueの値が変化すると自動的に再描画してくれる
               style: Theme.of(context).textTheme.headlineLarge,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          counter.value++; // ステートを更新する場合.valueを操作（useStateなのでsetStateは要らない）,
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
